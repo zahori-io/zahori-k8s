@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: server-ingressroute
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`server.test`) && PathPrefix(`/zahori`)
+      kind: Rule
+      services:
+        - name: openzahori-zahori
+          port: 9090

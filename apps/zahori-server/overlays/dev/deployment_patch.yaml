@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zahori
+  name: zahori
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zahori
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: zahori
+    spec:
+      containers:
+        - name: zahori
+          image: zahoriaut/zahori-server
+          ports:
+            - containerPort: 9090
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: zahori-config
+          env:
+            - name: ZAHORI_DB_HOST
+              value: openzahori-postgres-service
+            - name: ZAHORI_CONSUL_HOST
+              value: openzahori-consul-service
+            - name: ZAHORI_SELENOID_UI_INTERNAL_HOST
+              value: moon.moon.svc.cluster.local
+            - name: ZAHORI_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: zahori.db.pass
+                  name: zahori-secrets
+      initContainers:
+        - name: flyway
+          image: flyway/flyway:9.14.1-alpine
+          command: ["flyway", "migrate"]
+          env:
+            - name: FLYWAY_URL
+              value: jdbc:postgresql://openzahori-postgres-service:5432/zahori
+            - name: FLYWAY_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: zahori-config
+                  key: ZAHORI_DB_USER
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zahori-secrets
+                  key: zahori.db.pass
+            - name: FLYWAY_PLACEHOLDER_REPLACEMENT
+              value: "true"
+            - name: FLYWAY_PLACEHOLDERS_ZAHORI_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: zahori-config
+                  key: ZAHORI_DB_USER
+          volumeMounts:
+            - name: postgres-initdb
+              mountPath: /flyway/sql

@@ -1,0 +1,19 @@
+global:
+  name: consul
+  datacenter: dc1
+  image: consul:1.15.0
+
+server:
+  replicas: 1
+  storage: 1Gi
+  persistence:
+    enabled: true
+
+client:
+  enabled: true
+  replicas: 3
+
+ui:
+  enabled: true
+
+namespace: zahori

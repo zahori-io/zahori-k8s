@@ -1,0 +1,22 @@
+---
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - configmap.yaml
+  - ../../base
+  - traefik.yaml
+
+patchesStrategicMerge:
+  - storage_patch.yaml
+  - deployment_patch.yaml
+  - memorylimit_patch.yaml
+
+images:
+  - name: zahoriaut/zahori-server
+    newTag: 0.1.16
+
+secretGenerator:
+  - name: zahori-secrets
+    literals:
+      - zahori.db.pass=zahori

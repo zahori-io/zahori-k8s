@@ -1,0 +1,5 @@
+resources:
+  - overlays/dev
+  - traefik.yaml
+  - browser-moon.yaml
+namePrefix: openzahori-

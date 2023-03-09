@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: moon-ingressroute
+  namespace: moon
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`moon.test`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: moon
+          port: 8080
+    - match: Host(`moon.test`) && PathPrefix(`/wd/hub`)
+      kind: Rule
+      services:
+        - name: moon
+          port: 4444

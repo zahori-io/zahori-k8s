@@ -1,0 +1,28 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: zahori-pv
+  labels:
+    app: zahori
+    type: local
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/openzahori-dev/data/zahori-server
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zahori-pv-claim
+  labels:
+    app: zahori
+spec:
+  capacity:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

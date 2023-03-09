@@ -1,0 +1,56 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zahori
+  name: zahori
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zahori
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: zahori
+    spec:
+      containers:       
+      - name: zahori      
+        image: zahoriaut/zahori-server                  
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sh
+              - -c
+              - sleep 10
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /zahori/actuator/health/liveness
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 120
+          successThreshold: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /zahori/actuator/health/readiness
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 20
+          successThreshold: 1
+        volumeMounts:
+        - name: zahori-data
+          mountPath: /usr/app/evidences       
+      volumes:
+      - name: zahori-data
+        persistentVolumeClaim:
+          claimName: zahori-pv-claim
+      - name: postgres-initdb
+        configMap:
+          name: postgresql-scripts                
+status: {}

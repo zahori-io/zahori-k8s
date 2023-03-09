@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app: zahori
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - services.yaml
+
+configMapGenerator:
+  - name: postgresql-scripts
+    files:
+      - ./sql_version/V0.1.0.1__init_schema.sql
+      - ./sql_version/V0.1.0.2__init_data.sql
+      - ./sql_version/V0.1.1.1__schema.sql
+      - ./sql_version/V0.1.1.2__data.sql
+      - ./sql_version/V0.1.1.3__update_browser_versions.sql
+      - ./sql_version/V0.1.1.4__case_executions_attachments.sql
+      - ./sql_version/V0.1.1.5__screen_resolutions.sql
+      - ./sql_version/V0.1.1.6__update_browser_versions.sql
+      - ./sql_version/V0.1.1.7__update_browser_versions.sql
+      - ./sql_version/V0.1.14.sql
+      - ./sql_version/V0.1.15.sql
+      - ./sql_version/V0.1.16.sql
