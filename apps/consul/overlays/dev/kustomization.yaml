@@ -8,7 +8,7 @@ patchesStrategicMerge:
 
 images:
   - name: consul
-    newTag: "1.15.0"
+    newTag: "1.15.4"
 
 vars:
   - name: ZAHORI_CONSUL_HOST
