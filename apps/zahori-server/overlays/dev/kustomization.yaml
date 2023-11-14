@@ -14,7 +14,7 @@ patchesStrategicMerge:
 
 images:
   - name: zahoriaut/zahori-server
-    newTag: 0.1.16
+    newTag: 0.1.19
 
 secretGenerator:
   - name: zahori-secrets
