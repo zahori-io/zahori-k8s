@@ -17,4 +17,4 @@ namespace: default
 
 images:
   - name: postgres
-    newTag: "12.14-alpine"
+    newTag: "12.17-alpine"
